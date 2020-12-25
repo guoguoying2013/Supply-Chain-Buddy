@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/guoguoying2013/Supply-Chain-Buddy#readme",
   "dependencies": {
+    "arangojs": "^5.8.0",
     "express": "^4.17.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
