@@ -5,12 +5,12 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
       username: '',
       password: '',
     }
   this.handleSubmit = this.handleSubmit.bind(this);
   this.handleChange = this.handleChange.bind(this);
+  this.resetState = this.resetState.bind(this);
   }
 
   handleChange(e) {
@@ -18,6 +18,13 @@ class LoginForm extends React.Component {
     this.setState({
       [e.target.name]: e.target.value,
     })
+  }
+
+  resetState() {
+      this.setState({
+        username: '',
+        password: '',
+      })
   }
 
   handleSubmit(e) {
@@ -31,6 +38,7 @@ class LoginForm extends React.Component {
       .then((res) => {
         console.log('axio got response: ', res);
         this.props.closeModal();
+        this.resetState();
       })
       .catch((err) => {
         console.log('axios err: ', err);
@@ -44,17 +52,12 @@ class LoginForm extends React.Component {
     return (
       <div className="LoginModal">
         <form className="modal-content">
-          <label>
-            Username
-            <input type="text" value={this.state.username} onChange={this.handleChange} name='username'></input>
-          </label>
+          <h1>Login Form</h1>
+          <input type="text" value={this.state.username} onChange={this.handleChange} name='username' placeholder="Username" required></input>
           <br />
-          <label>
-            Password
-            <input type="text" value={this.state.password} onChange={this.handleChange} name='password'></input>
-          </label>
+          <input type="password" value={this.state.password} onChange={this.handleChange} name='password' placeholder="Password" required></input>
           <br />
-          <button onClick={this.handleSubmit}>Login</button>
+          <button onClick={this.handleSubmit} className="submit-button">Submit</button>
         </form>
       </div>
     )

@@ -13,8 +13,11 @@ button {
     border: none;
     border-radius: 3px;
     float: right;
+    cursor: pointer;
+}
+
+.nav button {
     margin: 15px 5%;
-    font-family: 'Roboto', sans-serif;
 }
 
 .nav {
@@ -43,8 +46,9 @@ button {
     background-color:white;
     margin: auto;
     border: 1px solid #05386B;
-    width: 300px;
-    height: 200px;
+    width: 350px;
+    height: 260px;
+    padding: 14px 14px 14px 14px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
@@ -60,4 +64,28 @@ button {
 @keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}
+}
+
+.modal-content h1{
+    text-align: center;
+    font-size: 24px;
+    padding: 14px 0 14px 0;
+}
+
+.modal-content input[type="password"],
+.modal-content input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #379683;
+    margin-bottom: 14px;
+    box-sizing:border-box;
+}
+
+.modal-content button{
+    width: 100%;
+    margin-top: 15px;
+    border: 0;
+    box-sizing:border-box;
+    text-align: center;
+    font-weight: bold;
 }
