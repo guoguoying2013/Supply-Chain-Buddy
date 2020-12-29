@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import LoginForm from './LoginForm.jsx';
 import Dashboard from './Dashboard.jsx'
 
@@ -9,6 +9,7 @@ class App extends React.Component {
     this.state = {
       isLogin: false,
       signinFormShow: false,
+      userId: '',
     }
     this.buttonContent = this.buttonContent.bind(this);
     this.toggleSigninModal = this.toggleSigninModal.bind(this);
@@ -32,15 +33,23 @@ class App extends React.Component {
     }
   }
 
-  toggleSigninModal() {
+  toggleSigninModal(userId) {
     if(this.state.signinFormShow) {
       this.setState({
         signinFormShow: false,
       });
+      if(userId) {
+        console.log('received userId: ', userId, 'updating state')
+        this.setState({
+          isLogin: true,
+          userId: userId,
+        })
+      }
     } else {
       this.setState({
         signinFormShow: true,
       });
+      // handle log out?
     }
   }
 
@@ -48,7 +57,6 @@ class App extends React.Component {
     return (
       <div>
         <div className="nav">
-          {this.state.isLogin && (<span>Hi username goes here!</span>)}
           <button onClick={this.toggleSigninModal}>{this.buttonContent()}</button>
         </div>
         <LoginForm 
@@ -56,8 +64,8 @@ class App extends React.Component {
           show={this.state.signinFormShow}
           closeModal={this.toggleSigninModal}
         />
-        {this.isLogin && (
-          <Dashboard />
+        {this.state.isLogin && (
+          <Dashboard userId={this.state.userId}/>
         )}
       </div>
     )
