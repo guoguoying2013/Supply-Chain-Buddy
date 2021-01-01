@@ -11,19 +11,12 @@ class Note extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.formatDate = this.formatDate.bind(this);
-    this.resetState = this.resetState.bind(this);
   }
 
   handleChange(e) {
     e.preventDefault();
     this.setState({
       [e.target.name]: e.target.value,
-    })
-  }
-
-  resetState() {
-    this.setState({
-      new_note: null,
     })
   }
 
@@ -44,7 +37,6 @@ class Note extends React.Component {
         this.setState({
             new_notes: old_notes,
         })
-        this.resetState();
       })
       .catch((err) => {
         console.log('axios err: ', err);
@@ -91,6 +83,7 @@ class Note extends React.Component {
                     <span className="note-created-date">{this.formatDate(note.created_date)}</span>
                     <br />
                     <span className="note-message">{note.message}</span>
+                    <br />
                     <br />
                 </div>
                 )
