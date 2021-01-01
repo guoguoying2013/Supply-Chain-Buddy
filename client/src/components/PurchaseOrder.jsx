@@ -76,6 +76,7 @@ class PurchaseOrder extends React.Component {
             isOverDue={isOverDue}
             tracking={tracking}
             formatDate={this.formatDate}
+            username={this.props.username}
           />
         )}
       </div>
