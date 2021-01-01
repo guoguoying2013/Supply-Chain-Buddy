@@ -17,8 +17,8 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pos: [],
-      cos: [],
+      customer_orders: [],
+      purchase_orders: [],
     }
     this.fetchOrders = this.fetchOrders.bind(this);
   }
@@ -28,35 +28,54 @@ class Dashboard extends React.Component {
   }
 
   fetchOrders() {
-    axios.get('/orders')
+    console.log('user_id recieved by fetchOrders: ', this.props.userId)
+    axios.get('/orders', {
+      params: {
+        user_id: this.props.userId,
+      }
+    })
+      .then((res) => {
+        console.log('res.data, get request: ', res.data)
+        this.setState({
+          customer_orders: res.data.customer_orders,
+          purchase_orders: res.data.purchase_orders
+        })
+      })
+      .catch((err) => {
+        console.log('fetchOrder got err: ', err);
+      })
   }
 
-  createOrders() {
-    axios.post('/orders')
-  }
+  // createOrders() {
+  //   axios.post('/orders')
+  // }
 
-  updateOrders() {
-    axios.put('/orders')
-  }
+  // updateOrders() {
+  //   axios.put('/orders')
+  // }
 
   render() {
     return (
       <div className="dashboard">
         <div className="user-info">
-          <UserProfileBox userId={this.props.userId}/>
+          {/* <UserProfileBox userId={this.props.userId}/> */}
         </div>
         <div className="orders">
+          <div className="section">Purchase Orders</div>
           <div className="purchase-orders">
-            {this.state.pos.length !== 0 && (
-              this.state.pos.map((po) => {
-                <PurchaseOrder po={po} />
+            {this.state.purchase_orders.length !== 0 && (
+              this.state.purchase_orders.map((po) => {
+                console.log('inside Dashboard purchase-orders po:', po);
+                return(<PurchaseOrder po={po} username={this.props.username}/>)
               })
             )}
           </div>
-          <div className="customer-orders">
-            {this.state.cos.length !== 0 && (
-              this.state.cos.map((po) => {
-                <CustomerOrder co={co} />
+          <div className="section">Customer Orders</div>
+          <div className="purchase-orders">
+            {this.state.customer_orders.length !== 0 && (
+              this.state.customer_orders.map((co) => {
+                console.log('inside Dashboard purchase-orders co:', co);
+                return(<PurchaseOrder po={co} username={this.props.username}/>)
               })
             )}
           </div>
@@ -64,12 +83,6 @@ class Dashboard extends React.Component {
       </div>
     )
   }
-}
-const Dashboard = () => {
-  console.log('dashboard is called')
-  return (
-    <div>This is dashbaord</div>
-  )
 }
 
 export default Dashboard;
