@@ -50,20 +50,28 @@ class Dashboard extends React.Component {
       }
     })
       .then((res) => {
-        console.log('!!!!!res.data, get request response from fetchPartners: ', res.data)
+        let customers = [];
+        let suppliers = [];
+        res.data.customers.map((customer) => {
+          customers.push([customer.customer_company, customer.customer_id]);
+        });
+        res.data.suppliers.map((supplier) => {
+          suppliers.push([supplier.vendor_company, supplier.vendor_id]);
+        });
         this.setState({
-          suppliers: res.data.suppliers,
-          customers: res.data.customers,
+          suppliers: suppliers,
+          customers: customers,
+          suppliers_obj: res.data.suppliers,
+          customers_obj: res.data.customers,
         })
       })
       .catch((err) => {
-        console.log('fetchOrder got err: ', err);
+        console.log('fetchPartners got err: ', err);
       })
   }
 
   addNewOrder(e) {
     e.preventDefault();
-    // bring up a motal or page to insert a new order?
     this.setState({
       newOrderForm: true
     })
@@ -113,7 +121,14 @@ class Dashboard extends React.Component {
               )}
             </div>
           </div>
-          {this.state.newOrderForm && (<EnterNewOrderModal customers={this.state.customers} suppliers={this.state.suppliers}/>)}
+          {this.state.newOrderForm && (<EnterNewOrderModal
+                                         customers={this.state.customers}
+                                         suppliers={this.state.suppliers}
+                                         user_id={this.props.userId}
+                                         username={this.props.username}
+                                         suppliers_obj={this.state.suppliers_obj}
+                                         customers_obj={this.state.customers_obj}
+                                       />)}
         </div>
       </div>
     )
