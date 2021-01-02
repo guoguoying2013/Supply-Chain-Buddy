@@ -40,10 +40,26 @@ app.get('/messages', async (req, res) => {
   }
 })
 
+app.post('/messages', async (req, res) => {
+  if(req.session.loggedin) {
+    let new_note = req.body;
+    try {
+      await db.Messages.save(new_note)
+        .then(doc => {
+          console.log('doc._key', doc._key);
+          res.status(201).send("Inserted doc with key value of: " + doc._key);
+        },
+        err => {res.status(400).send("Document not inserted - " + err.message)})
+    } catch (err) {
+      console.log(err);
+      res.status(404).send(err);
+    }
+  }
+})
+
 app.get('/orders', async (req, res) => {
   if(req.session.loggedin) {
     let user_id = Number(req.query.user_id);
-    console.log('req.query at app.get ', req.query);
     try {
       let pos_orders = await db.scb.query(aql`FOR po IN orders FILTER po.customer_id == ${user_id} RETURN po`);
       let pos = await pos_orders.all();
@@ -53,6 +69,26 @@ app.get('/orders', async (req, res) => {
         purchase_orders: pos,
         customer_orders: cos,
       })
+    } catch (err) {
+      console.log(err);
+      res.status(404).send(err);
+    }
+  }
+})
+
+app.get('/partners', async (req, res) => {
+  if(req.session.loggedin) {
+    let user_id = Number(req.query.user_id);
+    console.log('user_id at app.get ', req.query.user_id);
+    try {
+        let customers = await db.scb.query(aql`FOR d IN partners FILTER d.supplier_id == ${user_id} RETURN d`);
+        let my_customers = await customers.all();
+        let suppliers = await db.scb.query(aql`FOR d IN partners FILTER d.customer_id == ${user_id} RETURN d`);
+        let my_suppliers = await suppliers.all();
+        res.send({
+          customers: my_customers,
+          suppliers: my_suppliers,
+        })
     } catch (err) {
       console.log(err);
       res.status(404).send(err);

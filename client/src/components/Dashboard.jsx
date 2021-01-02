@@ -2,16 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import UserProfileBox from './UserProfileBox.jsx';
 import PurchaseOrder from './PurchaseOrder.jsx';
-import CustomerOrder from './CustomerOrder.jsx';
-
-// this.prop.user_id
-// searche by customer_id => PO, search by vendor_id => CO, shown when not none
-// each PO : po#, po_date, po_status(allow to change to close)
-  // click to an individula PO, bring out all notes.
-  // allow to create a new note, when new note created, an email would be sent out.
-// each CO : co#, co_date, co_status(allow to change to ship)
-  // click to an individula CO, bring out all notes.
-  // allow to create a new note, when new note created, an email would be sent out.
+import EnterNewOrderModal from './EnterNewOrderModal.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -19,12 +10,18 @@ class Dashboard extends React.Component {
     this.state = {
       customer_orders: [],
       purchase_orders: [],
+      newOrderForm: false,
+      suppliers: [],
+      customers: [],
     }
     this.fetchOrders = this.fetchOrders.bind(this);
+    this.addNewOrder = this.addNewOrder.bind(this);
+    this.fetchPartners = this.fetchPartners.bind(this);
   }
 
   componentDidMount() {
     this.fetchOrders();
+    this.fetchPartners();
   }
 
   fetchOrders() {
@@ -46,9 +43,31 @@ class Dashboard extends React.Component {
       })
   }
 
-  // createOrders() {
-  //   axios.post('/orders')
-  // }
+  fetchPartners() {
+    axios.get('/partners', {
+      params: {
+        user_id: this.props.userId,
+      }
+    })
+      .then((res) => {
+        console.log('!!!!!res.data, get request response from fetchPartners: ', res.data)
+        this.setState({
+          suppliers: res.data.suppliers,
+          customers: res.data.customers,
+        })
+      })
+      .catch((err) => {
+        console.log('fetchOrder got err: ', err);
+      })
+  }
+
+  addNewOrder(e) {
+    e.preventDefault();
+    // bring up a motal or page to insert a new order?
+    this.setState({
+      newOrderForm: true
+    })
+  }
 
   // updateOrders() {
   //   axios.put('/orders')
@@ -57,28 +76,44 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className="dashboard">
-        <div className="user-info">
-          {/* <UserProfileBox userId={this.props.userId}/> */}
+        <div className="dashbaord-left">
+          <div className="user-info">
+            <UserProfileBox userId={this.props.userId}/>
+          </div>
+          <div className="navigation-bar-left">
+            <button className="button-left-nav-bar">Orders</button>
+            <button className="button-left-nav-bar">Suppliers</button>
+            <button className="button-left-nav-bar">Customers</button>
+          </div>
         </div>
-        <div className="orders">
-          <div className="section">Purchase Orders</div>
-          <div className="purchase-orders">
-            {this.state.purchase_orders.length !== 0 && (
-              this.state.purchase_orders.map((po) => {
-                console.log('inside Dashboard purchase-orders po:', po);
-                return(<PurchaseOrder po={po} username={this.props.username}/>)
-              })
-            )}
+        <div className="dashbaord-right">
+          <div className="orders">
+            <div className="section">Purchase Orders</div>
+            <div className="purchase-orders">
+              <div className="add-new-box" onClick={this.addNewOrder}>
+                <i class="fas fa-plus-circle"></i>
+              </div>
+              {this.state.purchase_orders.length !== 0 && (
+                this.state.purchase_orders.map((po) => {
+                  console.log('inside Dashboard purchase-orders po:', po);
+                  return(<PurchaseOrder po={po} username={this.props.username}/>)
+                })
+              )}
+            </div>
+            <div className="section">Customer Orders</div>
+            <div className="purchase-orders">
+              <div className="add-new-box" onClick={this.addNewOrder}>
+                <i class="fas fa-plus-circle"></i>
+              </div>
+              {this.state.customer_orders.length !== 0 && (
+                this.state.customer_orders.map((co) => {
+                  console.log('inside Dashboard purchase-orders co:', co);
+                  return(<PurchaseOrder po={co} username={this.props.username}/>)
+                })
+              )}
+            </div>
           </div>
-          <div className="section">Customer Orders</div>
-          <div className="purchase-orders">
-            {this.state.customer_orders.length !== 0 && (
-              this.state.customer_orders.map((co) => {
-                console.log('inside Dashboard purchase-orders co:', co);
-                return(<PurchaseOrder po={co} username={this.props.username}/>)
-              })
-            )}
-          </div>
+          {this.state.newOrderForm && (<EnterNewOrderModal customers={this.state.customers} suppliers={this.state.suppliers}/>)}
         </div>
       </div>
     )
