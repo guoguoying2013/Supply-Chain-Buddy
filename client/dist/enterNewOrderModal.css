@@ -1,0 +1,33 @@
+.new-order-modal-content {
+    position: relative;
+    color: #05386B;
+    background-color:white;
+    margin: auto;
+    border: 1px solid #05386B;
+    width: 350px;
+    height: 550px;
+    padding: 14px 14px 14px 14px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+  
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+.new-order-modal-content input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #379683;
+    margin-bottom: 14px;
+    box-sizing:border-box;
+}

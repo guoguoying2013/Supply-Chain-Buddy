@@ -1,0 +1,39 @@
+.dashboard {
+    display: flex;
+}
+
+.dashbaord-left {
+    width: 15%;
+    height: 100%;
+    margin: 14px;
+    padding: 14px;
+}
+
+.button-left-nav-bar {
+    width: 50%;
+    margin: 14px;
+    padding: 14px;
+    float: none;
+    padding-bottom: 25px;
+}
+
+div.add-new-box {
+    width: 150px;
+    height: 72px;
+    border-radius: 6px;
+    border: 2px solid #379683;
+    font-size: 15px;
+    color: #5CDB95;
+    font-size: 40px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.add-new-box i {
+    margin-top: 15px;
+}
+
+div.add-new-box:hover {
+    box-shadow: 0 0 4px 2px #bdd4d0;
+    background-color: #edf5e1;
+}
