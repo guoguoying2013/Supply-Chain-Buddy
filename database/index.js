@@ -18,8 +18,8 @@ const Orders = db.collection('orders');
 // level of urgency(normal, important, urgent, when to send out late notice)
 const Messages = db.collection('messages');
 // order_number(index), writer_name, message, created_date
-const Relationship = db.collection('relationship');
-// customer(index), vendor_id(index)
+const Partners = db.collection('partners');
+// customer(index), customer_company_name, vendor_id(index), vendor_company_name
 
 /*
 accounts
@@ -43,6 +43,7 @@ orders
   customer_id: 1,
   vendor_id: 2,
   urgency_level: 'important',
+  total: 2000,
 }
 
 messages
@@ -53,4 +54,4 @@ module.exports.scb = db;
 module.exports.Orders = Orders;
 module.exports.Messages = Messages;
 module.exports.Accounts = Accounts;
-module.exports.Relationship = Relationship;
+module.exports.Partners = Partners;
