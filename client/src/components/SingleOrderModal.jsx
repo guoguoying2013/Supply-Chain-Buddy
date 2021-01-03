@@ -24,6 +24,7 @@ class SingleOrderModal extends React.Component {
 //   }
 
   fetchMessages() {
+    console.log('fetchMessages, order_number: ', this.props.order_number)
     axios.get('/messages', {
       params: {
         order_number: this.props.order_number
@@ -32,10 +33,11 @@ class SingleOrderModal extends React.Component {
       .then((response) => {
         this.setState({
           messages: response.data,
-          showMessages: true,
+          // showMessages: true,
         })
-        console.log('called setTimeout');
-        setTimeout(this.fetchMessages(), 800);
+        if(this.state.showMessages) {
+          setTimeout(this.fetchMessages(), 2000);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -48,9 +50,9 @@ class SingleOrderModal extends React.Component {
           showMessages: false,
       })
     } else {
-    //   this.setState({
-    //     showMessages: true,
-    //     })
+      this.setState({
+        showMessages: true,
+        })
       this.fetchMessages();
     }
   }

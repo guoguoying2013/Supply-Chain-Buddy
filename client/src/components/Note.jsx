@@ -6,7 +6,7 @@ class Note extends React.Component {
     super(props);
     this.state = {
       new_note: null,
-      new_notes: [],
+      // new_notes: [],
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,7 +21,6 @@ class Note extends React.Component {
   }
 
   handleSubmit(e) {
-    // username
     e.preventDefault();
     let data = {
       order_number: this.props.order_number,
@@ -29,6 +28,7 @@ class Note extends React.Component {
       message: this.state.new_note,
       created_date: new Date(),
     }
+    console.log('this is new data will be sent to server to post in deb: ', data);
     axios.post('/messages', data)
       .then((res) => {
         console.log('res at message modal: ', res)
@@ -60,7 +60,9 @@ class Note extends React.Component {
 
   render() {
     let notes = this.props.messages;
-    console.log('this.state.new_notes', this.state.new_notes);
+    if (notes === null) {
+      notes=[];
+    }
     return (
       <div>
         <div className="notes-modal">
@@ -76,7 +78,7 @@ class Note extends React.Component {
                 </div>
                 )
             })}
-            {this.state.new_notes.length !== 0 && this.state.new_notes.map((note) => {
+            {/* {this.state.new_notes.length !== 0 && this.state.new_notes.map((note) => {
                 return (
                 <div className="one-message">
                     <span className="note-username">{note.writer_name}</span>
@@ -87,7 +89,7 @@ class Note extends React.Component {
                     <br />
                 </div>
                 )
-            })}
+            })} */}
         </div>
         <br />
         <div>
