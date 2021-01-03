@@ -11,14 +11,17 @@ class SingleOrderModal extends React.Component {
       messages: null,
       trackingHistory: null,
       showTracking: false,
+      showMessages: false,
     }
     this.fetchMessages = this.fetchMessages.bind(this);
     this.searchTrackingAPI = this.searchTrackingAPI.bind(this);
+    this.toggleMessages = this.toggleMessages.bind(this);
+    this.toggleTracking = this.toggleTracking.bind(this);
   }
 
-  componentDidMount() {
-    this.fetchMessages();
-  }
+//   componentDidMount() {
+//     this.fetchMessages();
+//   }
 
   fetchMessages() {
     axios.get('/messages', {
@@ -29,32 +32,64 @@ class SingleOrderModal extends React.Component {
       .then((response) => {
         this.setState({
           messages: response.data,
+          showMessages: true,
         })
+        console.log('called setTimeout');
+        setTimeout(this.fetchMessages(), 800);
       })
       .catch((err) => {
         console.log(err);
       })
   }
 
+  toggleMessages() {
+    if(this.state.showMessages) {
+      this.setState({
+          showMessages: false,
+      })
+    } else {
+    //   this.setState({
+    //     showMessages: true,
+    //     })
+      this.fetchMessages();
+    }
+  }
+
+  toggleTracking() {
+    if(this.state.showTracking) {
+      this.setState({
+      showTracking: false,
+    })
+    } else {
+      this.searchTrackingAPI(this.props.tracking)
+    }
+  }
+
   searchTrackingAPI(trackingId) {
     console.log('trackingId: ', trackingId);
     console.log('API_tracking_key', API_tracking.API_tracking_key);
-    axios.get(`https://api.aftership.com/v4/trackings?id=${trackingId}`, {
-      headers: {
+    if(trackingId !== 'Not Available') {
+      axios.get(`https://api.aftership.com/v4/trackings?id=${trackingId}`, {
+        headers: {
         'aftership-api-key': API_tracking.API_tracking_key,
         'Content-Type': 'application/json',
-      }
-    })
-      .then((res) => {
+        }
+      })
+        .then((res) => {
         console.log('res.data: ', res.data.data.trackings[0].checkpoints);
         this.setState({
-          trackingHistory: res.data.data.trackings[0].checkpoints,
-          showTracking: true,
+            trackingHistory: res.data.data.trackings[0].checkpoints,
+            showTracking: true,
         })
-      })
-      .catch((err) => {
+        })
+        .catch((err) => {
         console.log(err);
+        })
+    } else {
+      this.setState({
+        showTracking: true,
       })
+    }
   }
 
   render() {
@@ -75,20 +110,21 @@ class SingleOrderModal extends React.Component {
               <div className="po-tracking">Tracking Number: {this.props.tracking}</div>
             </div>
             <div className="po-detail-modal-top-right">
-              <button>Email</button>
+              <button type="button" onClick={this.toggleMessages}>Messages</button>
               <br />
               <br />
-              <button type="button" onClick={() => {this.searchTrackingAPI(this.props.tracking)}}>Tracking</button>
+              {/* <button type="button" onClick={() => {this.searchTrackingAPI(this.props.tracking)}}>Tracking</button> */}
+              <button type="button" onClick={this.toggleTracking}>Tracking</button>
               <br />
               <br />
               <button type="button" onClick={this.props.toggleModal}>Close</button>
             </div>
           </div>
-          {this.state.messages && (
+          {this.state.showMessages && (
             <Note messages={this.state.messages} order_number={this.props.order_number} username={this.props.username}/>
           )}
           {this.state.showTracking && (
-            <TrackingHistory trackingHistory={this.state.trackingHistory}/>
+            <TrackingHistory trackingHistory={this.state.trackingHistory} tracking={this.props.tracking}/>
           )}
         </div>
       </div>

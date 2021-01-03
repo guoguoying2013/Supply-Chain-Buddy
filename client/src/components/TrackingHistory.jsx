@@ -6,6 +6,13 @@ class TrackingHistory extends React.Component {
   }
 
   render() {
+    if(this.props.tracking === 'Not Available') {
+      return (
+        <div className="tracking-history">
+          Tracking info is not available for this order.
+        </div>
+      )
+    }
     return(
       <div className="tracking-history">
         {this.props.trackingHistory.reverse().map((t) => {
