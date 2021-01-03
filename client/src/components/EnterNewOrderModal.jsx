@@ -51,6 +51,7 @@ class EnterNewOrderModal extends React.Component {
       .then((res) => {
         console.log('res at post new order modal: ', res);
         // close modal and call fetchOrders again
+        this.props.toggleForm(e);
       })
       .catch((err) => {
         console.log('axios err: ', err);

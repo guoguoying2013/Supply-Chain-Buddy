@@ -72,9 +72,16 @@ class Dashboard extends React.Component {
 
   addNewOrder(e) {
     e.preventDefault();
-    this.setState({
-      newOrderForm: true
-    })
+    if(this.state.newOrderForm) {
+      this.setState({
+        newOrderForm: false,
+      })
+      this.fetchOrders();
+    } else {
+      this.setState({
+        newOrderForm: true
+      })
+    }
   }
 
   // updateOrders() {
@@ -128,6 +135,7 @@ class Dashboard extends React.Component {
                                          username={this.props.username}
                                          suppliers_obj={this.state.suppliers_obj}
                                          customers_obj={this.state.customers_obj}
+                                         toggleForm = {this.addNewOrder}
                                        />)}
         </div>
       </div>
