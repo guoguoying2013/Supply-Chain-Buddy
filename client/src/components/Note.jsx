@@ -32,11 +32,11 @@ class Note extends React.Component {
     axios.post('/messages', data)
       .then((res) => {
         console.log('res at message modal: ', res)
-        let old_notes = this.state.new_notes;
-        old_notes.push(data);
-        this.setState({
-            new_notes: old_notes,
-        })
+        // let old_notes = this.state.new_notes;
+        // old_notes.push(data);
+        // this.setState({
+        //     new_notes: old_notes,
+        // })
       })
       .catch((err) => {
         console.log('axios err: ', err);
