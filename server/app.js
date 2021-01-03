@@ -74,6 +74,24 @@ app.get('/orders', async (req, res) => {
       res.status(404).send(err);
     }
   }
+});
+
+app.post('/orders', async (req, res) => {
+  if(req.session.loggedin) {
+    let new_message = req.body;
+    console.log('new_message: ', new_message);
+    try {
+      await db.Orders.save(new_message)
+        .then(doc => {
+            console.log('doc._key', doc._key);
+            res.status(201).send("Inserted doc with key value of: " + doc._key);
+        },
+        err => {res.status(400).send("Document not inserted - " + err.message)})
+    } catch (err) {
+      console.log(err);
+      res.status(404).send(err);
+    }
+  }
 })
 
 app.get('/partners', async (req, res) => {
@@ -81,7 +99,7 @@ app.get('/partners', async (req, res) => {
     let user_id = Number(req.query.user_id);
     console.log('user_id at app.get ', req.query.user_id);
     try {
-        let customers = await db.scb.query(aql`FOR d IN partners FILTER d.supplier_id == ${user_id} RETURN d`);
+        let customers = await db.scb.query(aql`FOR d IN partners FILTER d.vendor_id == ${user_id} RETURN d`);
         let my_customers = await customers.all();
         let suppliers = await db.scb.query(aql`FOR d IN partners FILTER d.customer_id == ${user_id} RETURN d`);
         let my_suppliers = await suppliers.all();
