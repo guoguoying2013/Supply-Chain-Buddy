@@ -1,7 +1,8 @@
 import React from 'react';
 // import axios from 'axios';
 import LoginForm from './LoginForm.jsx';
-import Dashboard from './Dashboard.jsx'
+import Dashboard from './Dashboard.jsx';
+import UserProfileBox from './UserProfileBox.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,27 +11,12 @@ class App extends React.Component {
       isLogin: false,
       signinFormShow: false,
       userId: '',
+      username: null,
+      showSuppliersState: false,
     }
-    this.buttonContent = this.buttonContent.bind(this);
     this.toggleSigninModal = this.toggleSigninModal.bind(this);
-  }
-
-//   requireLogin() {
-//     // this func will check session/cookie
-//     axios.post('/login')
-//       .then(response => {
-//           console.log('response from /login get request', response);
-//       })
-//   }
-
-  buttonContent() {
-    if(this.state.isLogin) {
-      return 'Logout'
-    } else if(!this.state.signinFormShow){
-      return 'Click to Login'
-    } else {
-      return 'Login form is open'
-    }
+    this.passUsername = this.passUsername.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   toggleSigninModal(userId) {
@@ -49,24 +35,58 @@ class App extends React.Component {
       this.setState({
         signinFormShow: true,
       });
-      // handle log out?
     }
+  }
+
+  logout() {
+    this.setState({
+      isLogin: false,
+    })
+  }
+
+  passUsername(u) {
+    this.setState({
+      username: u
+    })
   }
 
   render() {
     return (
       <div>
         <div className="nav">
-          <button onClick={this.toggleSigninModal}>{this.buttonContent()}</button>
+          <i id="logo" class="far fa-lightbulb"></i>
+          <span id="supply-chain">SupplyChain</span>
+          <span id="buddy">Buddy</span>
+          {!this.state.isLogin && (
+            <button onClick={this.toggleSigninModal}>Login</button>
+          )}
+          {this.state.isLogin && (
+            <button onClick={this.logout}>Logout</button>
+          )}
         </div>
         <LoginForm 
-          requireLogin={this.requireLogin}
           show={this.state.signinFormShow}
           closeModal={this.toggleSigninModal}
+          passUsername={this.passUsername}
         />
-        {this.state.isLogin && (
-          <Dashboard userId={this.state.userId}/>
-        )}
+        <div className="dashboard">
+          {this.state.isLogin && (
+            <Dashboard
+              userId={this.state.userId}
+              username={this.state.username}
+            />
+          )}
+          {!this.state.isLogin && (
+            <div>
+              <div className="first-page-logo">
+                <i id="logo" class="far fa-lightbulb"></i>
+                <span id="supply-chain">SupplyChain</span>
+                <span id="buddy">Buddy</span>
+              </div>
+              <img id="first-page" src='./backgroundFinal.png'/>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import UserProfileBox from './UserProfileBox.jsx';
 import PurchaseOrder from './PurchaseOrder.jsx';
 import EnterNewOrderModal from './EnterNewOrderModal.jsx';
+import SuppliersEvaluation from './SuppliersEvaluation.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -13,10 +14,15 @@ class Dashboard extends React.Component {
       newOrderForm: false,
       suppliers: [],
       customers: [],
+      showOrders: true,
+      showSuppliers: false,
+      showCustomers: false,
     }
     this.fetchOrders = this.fetchOrders.bind(this);
     this.addNewOrder = this.addNewOrder.bind(this);
     this.fetchPartners = this.fetchPartners.bind(this);
+    this.showSuppliers = this.showSuppliers.bind(this);
+    this.showOrders = this.showOrders.bind(this);
   }
 
   componentDidMount() {
@@ -70,6 +76,24 @@ class Dashboard extends React.Component {
       })
   }
 
+  showOrders(e) {
+    e.preventDefault();
+    this.setState({
+      showOrders: true,
+      showSuppliers: false,
+      showCustomers: false,
+    })
+  }
+
+  showSuppliers(e) {
+    e.preventDefault();
+    this.setState({
+      showOrders: false,
+      showSuppliers: true,
+      showCustomers: false,
+    })
+  }
+
   addNewOrder(e) {
     e.preventDefault();
     if(this.state.newOrderForm) {
@@ -96,38 +120,49 @@ class Dashboard extends React.Component {
             <UserProfileBox userId={this.props.userId}/>
           </div>
           <div className="navigation-bar-left">
-            <button className="button-left-nav-bar">Orders</button>
-            <button className="button-left-nav-bar">Suppliers</button>
+            <button className="button-left-nav-bar" onClick={this.showOrders}>Orders</button>
+            <button className="button-left-nav-bar" onClick={this.showSuppliers}>Suppliers</button>
             <button className="button-left-nav-bar">Customers</button>
           </div>
         </div>
         <div className="dashbaord-right">
-          <div className="orders">
-            <div className="section">Purchase Orders</div>
-            <div className="purchase-orders">
-              <div className="add-new-box" onClick={this.addNewOrder}>
-                <i class="fas fa-plus-circle"></i>
+
+          {this.state.showSuppliers && (
+            <SuppliersEvaluation
+              suppliers={this.state.suppliers}
+              suppliers_obj={this.state.suppliers_obj}
+            />
+          )}
+
+          {this.state.showOrders && (
+            <div className="orders">
+              <div className="section">Purchase Orders</div>
+              <div className="purchase-orders">
+                <div className="add-new-box" onClick={this.addNewOrder}>
+                  <i class="fas fa-plus-circle"></i>
+                </div>
+                {this.state.purchase_orders.length !== 0 && (
+                  this.state.purchase_orders.map((po) => {
+                    console.log('inside Dashboard purchase-orders po:', po);
+                    return(<PurchaseOrder po={po} username={this.props.username}/>)
+                  })
+                )}
               </div>
-              {this.state.purchase_orders.length !== 0 && (
-                this.state.purchase_orders.map((po) => {
-                  console.log('inside Dashboard purchase-orders po:', po);
-                  return(<PurchaseOrder po={po} username={this.props.username}/>)
-                })
-              )}
-            </div>
-            <div className="section">Customer Orders</div>
-            <div className="purchase-orders">
-              <div className="add-new-box" onClick={this.addNewOrder}>
-                <i class="fas fa-plus-circle"></i>
+              <div className="section">Customer Orders</div>
+              <div className="purchase-orders">
+                <div className="add-new-box" onClick={this.addNewOrder}>
+                  <i class="fas fa-plus-circle"></i>
+                </div>
+                {this.state.customer_orders.length !== 0 && (
+                  this.state.customer_orders.map((co) => {
+                    console.log('inside Dashboard purchase-orders co:', co);
+                    return(<PurchaseOrder po={co} username={this.props.username}/>)
+                  })
+                )}
               </div>
-              {this.state.customer_orders.length !== 0 && (
-                this.state.customer_orders.map((co) => {
-                  console.log('inside Dashboard purchase-orders co:', co);
-                  return(<PurchaseOrder po={co} username={this.props.username}/>)
-                })
-              )}
             </div>
-          </div>
+          )}
+
           {this.state.newOrderForm && (<EnterNewOrderModal
                                          customers={this.state.customers}
                                          suppliers={this.state.suppliers}
@@ -137,8 +172,9 @@ class Dashboard extends React.Component {
                                          customers_obj={this.state.customers_obj}
                                          toggleForm = {this.addNewOrder}
                                        />)}
-        </div>
-      </div>
+
+         </div>
+       </div>
     )
   }
 }
