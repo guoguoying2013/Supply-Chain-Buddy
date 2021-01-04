@@ -57,13 +57,48 @@ app.post('/messages', async (req, res) => {
   }
 })
 
+app.get('/history', async (req, res) => {
+  if(req.session.loggedin) {
+    let suppliers = req.query.suppliers;
+    let result = [];
+    try {
+      for (let i = 0; i < suppliers.length; i++) {
+        let vendor_id = JSON.parse(suppliers[i])[1];
+        let vendor_name = JSON.parse(suppliers[i])[0];
+        if (req.session.user_id[0] !== vendor_id) {
+          let history = await db.scb.query(aql`FOR po IN orders FILTER po.customer_id == ${req.session.user_id[0]} FILTER po.status == 'closed' FILTER po.vendor_id == ${vendor_id} RETURN po`);
+          let orderHistory = await history.all();
+          result.push([vendor_name, orderHistory]);
+        }
+      }
+      let sumTotal = await db.scb.query(aql`
+      FOR doc IN orders
+      COLLECT group = (doc.vendor_id == 2 ? "Crispy Bakery" : 
+                      (doc.vendor_id == 3 ? "Sunny Farm" : 
+                      (doc.vendor_id == 4 ?  "Meet Fresh" : "other" )))
+      AGGREGATE s = SUM(doc.total)
+      RETURN { group, s }
+      `)
+      let sumTotalRes = await sumTotal.all();
+      console.log(sumTotalRes);
+      res.send({
+        orderHistory: result,
+        sumByVendors: sumTotalRes,
+      })
+    } catch (err) {
+      console.log(err);
+      res.status(404).send(err);
+    }
+  }
+});
+
 app.get('/orders', async (req, res) => {
   if(req.session.loggedin) {
     let user_id = Number(req.query.user_id);
     try {
-      let pos_orders = await db.scb.query(aql`FOR po IN orders FILTER po.customer_id == ${user_id} RETURN po`);
+      let pos_orders = await db.scb.query(aql`FOR po IN orders FILTER po.customer_id == ${user_id} AND po.status != 'closed' RETURN po`);
       let pos = await pos_orders.all();
-      let cos_orders = await db.scb.query(aql`FOR co IN orders FILTER co.vendor_id == ${user_id} RETURN co`);
+      let cos_orders = await db.scb.query(aql`FOR co IN orders FILTER co.vendor_id == ${user_id} AND co.status != 'closed' RETURN co`);
       let cos = await cos_orders.all();
       res.send({
         purchase_orders: pos,
@@ -110,6 +145,21 @@ app.get('/partners', async (req, res) => {
     } catch (err) {
       console.log(err);
       res.status(404).send(err);
+    }
+  }
+})
+
+app.get('/user', async (req, res) => {
+  if(req.session.loggedin) {
+    let user_id = Number(req.query.user_id);
+    console.log('user_id at app.get/user ', req.query.user_id);
+    try {
+        let customers = await db.scb.query(aql`FOR d IN accounts FILTER d.user_id == ${user_id} RETURN d`);
+        let you = await customers.all();
+        res.send(you);
+    } catch (err) {
+        console.log(err);
+        res.status(404).send(err);
     }
   }
 })
