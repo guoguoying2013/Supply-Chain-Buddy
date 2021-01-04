@@ -1,0 +1,25 @@
+#first-page {
+    background: transparent;
+    align-content: center;
+    text-align: center;
+}
+
+#supply-chain{
+    font-size: x-large;
+    padding: 4px;
+    font-weight: bold;
+}
+
+#logo,
+#buddy {
+    font-size: 25px;
+    color: #d46756;
+    padding: 4px;
+    font-weight: bold;
+}
+
+.first-page-logo {
+    align-content: center;
+    text-align: center;
+    padding-top: 50px;
+}
