@@ -1,16 +1,30 @@
 .dashboard {
     display: flex;
+    background-color: white;
 }
 
 .dashbaord-left {
-    width: 15%;
+    width: 200px;
     height: 100%;
     margin: 14px;
     padding: 14px;
 }
 
+img.your-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #5CDB95;
+}
+
+h3.your-company,
+span.greeting {
+    text-align: center;
+    align-content: center;
+}
+
 .button-left-nav-bar {
-    width: 50%;
+    width: 200px;
     margin: 14px;
     padding: 14px;
     float: none;
