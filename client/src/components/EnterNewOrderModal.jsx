@@ -31,6 +31,8 @@ class EnterNewOrderModal extends React.Component {
     newOrderEntry.customer_id = customer_id_int;
     let vendor_id_int = parseInt(newOrderEntry.vendor_id);
     newOrderEntry.vendor_id = vendor_id_int;
+    let order_number_int = parseInt(newOrderEntry.order_number);
+    newOrderEntry.order_number = order_number_int;
 
     for (let i = 0; i < this.props.customers_obj.length; i++) {
         if(this.props.customers_obj[i].customer_id === newOrderEntry.customer_id) {
@@ -50,7 +52,6 @@ class EnterNewOrderModal extends React.Component {
     axios.post('/orders', newOrderEntry)
       .then((res) => {
         console.log('res at post new order modal: ', res);
-        // close modal and call fetchOrders again
         this.props.toggleForm(e);
       })
       .catch((err) => {

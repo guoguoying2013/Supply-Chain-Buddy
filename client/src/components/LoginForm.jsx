@@ -36,8 +36,9 @@ class LoginForm extends React.Component {
     };
     axios.post('/login', data)
       .then((res) => {
-        console.log('axio got response: ', res);
-        this.props.closeModal();
+        this.props.closeModal(res.data[0]);
+        let u = this.state.username;
+        this.props.passUsername(u);
         this.resetState();
       })
       .catch((err) => {

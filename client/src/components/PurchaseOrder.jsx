@@ -42,7 +42,7 @@ class PurchaseOrder extends React.Component {
   render() {
     let tracking = 'Not Available'
     if(this.props.po.tracking) {
-      tracking = po.tracking;
+      tracking = (<i className="fas fa-check" id="green-checkmark"></i>);
     }
     let isOverDue = false;
     let requiredShippingDate = new Date(this.props.po.required_shipping_date)
@@ -62,7 +62,8 @@ class PurchaseOrder extends React.Component {
             <div className="po-vendor"> {this.props.po.vendor_name}</div>
             <div className="po-number">PO Number:    {this.props.po.order_number}</div>
             <div className="po-date">PO Date:    {this.formatDate(this.props.po.order_issue_date)}</div>
-            <div className="po-due-date">Required Shipping Date: {this.formatDate(this.props.po.required_shipping_date)}</div>
+            <div className="po-due-date">Required Shipping Date: </div>
+            <div>{this.formatDate(this.props.po.required_shipping_date)}</div>
             <div className="po-status">Status:    {this.props.po.status}</div>
             <div className="po-tracking">Tracking Number: {tracking}</div>
           </div>
@@ -83,17 +84,5 @@ class PurchaseOrder extends React.Component {
     )
   }
 }
-
-/*
-customer_id: 1
-documents: null
-order_issue_date: "Sat Dec 26 2020 11:53:50 GMT-0800 (Pacific Standard Time)"
-order_number: 1
-required_shipping_date: "Wed Dec 30 2020 11:53:50 GMT-0800 (Pacific Standard Time)"
-status: "released_to_production"
-tracking: null
-urgency_level: "important"
-vendor_id: 2
-*/
 
 export default PurchaseOrder;
