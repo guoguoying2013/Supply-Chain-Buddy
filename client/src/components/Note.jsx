@@ -5,8 +5,7 @@ class Note extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      new_note: null,
-      // new_notes: [],
+      new_note: '',
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,12 +30,7 @@ class Note extends React.Component {
     console.log('this is new data will be sent to server to post in deb: ', data);
     axios.post('/messages', data)
       .then((res) => {
-        console.log('res at message modal: ', res)
-        // let old_notes = this.state.new_notes;
-        // old_notes.push(data);
-        // this.setState({
-        //     new_notes: old_notes,
-        // })
+        console.log('posted', res.data)
       })
       .catch((err) => {
         console.log('axios err: ', err);
@@ -68,7 +62,7 @@ class Note extends React.Component {
         <div className="notes-modal">
             {notes.map((note) => {
                 return (
-                <div className="one-message">
+                <div className="one-message" key={note._id}>
                     <span className="note-username">{note.writer_name}</span>
                     <span className="note-created-date">{this.formatDate(note.created_date)}</span>
                     <br />
@@ -78,18 +72,6 @@ class Note extends React.Component {
                 </div>
                 )
             })}
-            {/* {this.state.new_notes.length !== 0 && this.state.new_notes.map((note) => {
-                return (
-                <div className="one-message">
-                    <span className="note-username">{note.writer_name}</span>
-                    <span className="note-created-date">{this.formatDate(note.created_date)}</span>
-                    <br />
-                    <span className="note-message">{note.message}</span>
-                    <br />
-                    <br />
-                </div>
-                )
-            })} */}
         </div>
         <br />
         <div>
