@@ -14,16 +14,17 @@ const isLoginMiddleware = (req, res, next) => {
   if (req.session.loggedin) {
     next();
   } else {
-    console.log('user is not login');
-    res.send('user is not login');
+    console.log('Unauthorized, please login');
+    res.status(401).send('Unauthorized, please login');
   }
 };
 
 app.use(session({
   secret: sessionSecret.sessionSecret,
-  resave: true,
+  rolling: true,
+  resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 90000 }, // 60000that is one min //refresh the coocki
+  cookie: { maxAge: 1200000 },
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -96,6 +97,14 @@ app.get('/api/user', async (req, res) => {
   }
 });
 
+app.get('/api/home', (req, res) => {
+  try {
+    res.status(200).send(req.session.user_id);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 app.post('/auth/login', async (req, res) => {
   try {
     const { username } = req.body;
@@ -111,14 +120,6 @@ app.post('/auth/login', async (req, res) => {
     }
   } catch (err) {
     res.status(404).send(err);
-  }
-});
-
-app.get('/api/home', (req, res) => {
-  try {
-    res.status(200).send(req.session.user_id);
-  } catch (err) {
-    res.send(err);
   }
 });
 
