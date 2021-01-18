@@ -21,5 +21,34 @@ const getPurchaseOrders = async (userId) => {
   }
 };
 
+const getOrderHistoryBySupplierId = async (userId, supplierId) => {
+  try {
+    const getHistory = await db.scb.query(aql`FOR po IN orders FILTER po.customer_id == ${userId} FILTER po.status == 'closed' FILTER po.vendor_id == ${supplierId} RETURN po`);
+    const orderHistory = await getHistory.all();
+    return orderHistory;
+  } catch (err) {
+    return err;
+  }
+};
+
+const sumOrderHistoryBySupplier = async () => {
+  try {
+    const getSumTotal = await db.scb.query(aql`
+    FOR doc IN orders
+    COLLECT group = (doc.vendor_id == 2 ? "Crispy Bakery" : 
+                    (doc.vendor_id == 3 ? "Sunny Farm" : 
+                    (doc.vendor_id == 4 ?  "Meet Fresh" : "other" )))
+    AGGREGATE s = SUM(doc.total)
+    RETURN { group, s }
+    `);
+    const sumTotal = await getSumTotal.all();
+    return sumTotal;
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports.getCustomerOrders = getCustomerOrders;
 module.exports.getPurchaseOrders = getPurchaseOrders;
+module.exports.getOrderHistoryBySupplierId = getOrderHistoryBySupplierId;
+module.exports.sumOrderHistoryBySupplier = sumOrderHistoryBySupplier;

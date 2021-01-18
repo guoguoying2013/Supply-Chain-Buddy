@@ -11,4 +11,14 @@ const getMessages = async (orderNumber) => {
   }
 };
 
+const postMessages = (newMessage) => {
+  db.Messages.save(newMessage)
+    .then(
+      (doc) => doc._key)
+    .catch(
+      (err) => err.message,
+    );
+};
+
 module.exports.getMessages = getMessages;
+module.exports.postMessages = postMessages;
