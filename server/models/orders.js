@@ -48,7 +48,14 @@ const sumOrderHistoryBySupplier = async () => {
   }
 };
 
+const postNewOrder = async (newPost) => {
+  db.Orders.save(newPost)
+    .then((doc) => `posted a new order, dock._key is ${doc._key}`)
+    .catch((err) => err);
+};
+
 module.exports.getCustomerOrders = getCustomerOrders;
 module.exports.getPurchaseOrders = getPurchaseOrders;
 module.exports.getOrderHistoryBySupplierId = getOrderHistoryBySupplierId;
 module.exports.sumOrderHistoryBySupplier = sumOrderHistoryBySupplier;
+module.exports.postNewOrder = postNewOrder;
