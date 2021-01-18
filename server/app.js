@@ -5,19 +5,11 @@ const bodyParser = require('body-parser');
 const models = require('./models');
 const controllers = require('./controllers');
 const sessionSecret = require('../token_login.js');
+const middleware = require('./middleware');
 
 // salty and hash password.
 
 const app = express();
-
-const isLoginMiddleware = (req, res, next) => {
-  if (req.session.loggedin) {
-    next();
-  } else {
-    console.log('Unauthorized, please login');
-    res.status(401).send('Unauthorized, please login');
-  }
-};
 
 app.use(session({
   secret: sessionSecret.sessionSecret,
@@ -29,7 +21,7 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
-app.use('/api', isLoginMiddleware);
+app.use('/api', middleware.isLogin);
 
 app.get('/api/orders', async (req, res) => {
   const userId = Number(req.query.user_id);
