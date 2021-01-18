@@ -11,4 +11,15 @@ const getUserInfo = async (userId) => {
   }
 };
 
+const searchUser = async (username, password) => {
+  try {
+    const account = await db.scb.query(aql`FOR d IN accounts FILTER d.username == ${username} AND d.password == ${password} RETURN d`);
+    const user = await account.all();
+    return user;
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports.getUserInfo = getUserInfo;
+module.exports.searchUser = searchUser;
