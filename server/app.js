@@ -99,26 +99,26 @@ app.get('/api/home', (req, res) => {
 
 app.post('/auth/login', async (req, res) => {
   try {
-    const { username } = req.body;
-    const { password } = req.body;
-    const user = await models.users.searchUser(username, password);
-    if (user[0].user_id > 0) {
+    const isValid = controllers.validateLoginInfo(req.body);
+    if (isValid) {
       req.session.loggedin = true;
-      req.session.username = username;
-      req.session.user_id = [user[0].user_id];
+      req.session.username = req.body.username;
+      req.session.user_id = [1];
       res.redirect('/api/home');
-    } else {
-      res.send('Incorrect Username and/or Password!');
     }
   } catch (err) {
     res.status(404).send(err);
   }
 });
 
-app.post('/auth/signup', (req, res) => {
-  const { username } = req.body;
-  const { password } = req.body;
-  res.send('WIP');
+app.post('/auth/signup', async (req, res) => {
+  const newUserInfo = req.body;
+  try {
+    const response = await models.users.createUserAccount(newUserInfo);
+    res.send(response);
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 module.exports = app;
