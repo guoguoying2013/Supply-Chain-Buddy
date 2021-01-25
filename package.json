@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js --watch",
+    "start": "nodemon server",
+    "database": "/usr/local/sbin/arangod"
   },
   "repository": {
     "type": "git",
@@ -19,14 +21,31 @@
   "homepage": "https://github.com/guoguoying2013/Supply-Chain-Buddy#readme",
   "dependencies": {
     "arangojs": "^5.8.0",
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "eslint-config-airbnb": "^18.2.1",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "faker": "^5.1.0",
+    "nodemon": "^2.0.6",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-minimal-pie-chart": "^8.1.0",
+    "react-vis": "^1.11.7",
+    "recharts": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
     "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.1",
+    "eslint": "^7.18.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "style-loader": "^2.0.0",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0"
   }
