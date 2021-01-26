@@ -32,13 +32,13 @@ const App = () => {
           <button onClick={toggleSigninModal} type="button">Login</button>
         )}
         {isLogin && (
-          <button onClick={() => { toggleLogin(false); }} type="button">Logout</button>
+          <button onClick={() => { toggleLogin(false); toggleDashBoard(false); }} type="button">Logout</button>
         )}
       </div>
       <LoginForm
         show={signinFormShow}
         closeModal={toggleSigninModal}
-        passUsername={(u) => { setUsername(u); }}
+        passUsername={setUsername}
       />
       <div className="dashboard">
         {showDashBoard && (
