@@ -1,7 +1,7 @@
 import React from 'react';
 
 const TrackingHistory = (props) => {
-  if (props.tracking === 'Not Available') {
+  if (props.trackingHistory === 'not available') {
     return (
       <div className="tracking-history">
         Tracking info is not available for this order.

@@ -1,15 +1,20 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Note from './Note.jsx';
 import TrackingHistory from './TrackingHistory.jsx';
 
-const SingleOrderModal = ({ orderNumber, orderInfo, toggleModal, tracking, formatDate, username}) => {
+const SingleOrderModal = (
+  {
+    orderNumber, orderInfo, toggleModal, tracking, formatDate, username,
+  },
+) => {
   const [messages, setMessages] = useState(null);
   const [trackingHistory, setTrackingHistory] = useState(null);
   const [showTracking, setShowTracking] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
 
   function fetchMessages() {
+    console.log('fetchMessages is called');
     axios.get('/api/messages', {
       params: {
         order_number: orderNumber,
@@ -32,26 +37,25 @@ const SingleOrderModal = ({ orderNumber, orderInfo, toggleModal, tracking, forma
       setShowMessages(false);
     } else {
       setShowMessages(true);
+      fetchMessages();
     }
   }
 
   function searchTrackingAPI(trackingId) {
-    console.log('trackingId', trackingId);
-    if (trackingId !== 'Not Available') {
+    if (trackingId !== null) {
       axios.get('/api/tracking', {
         params: {
           id: trackingId,
         },
       })
         .then((res) => {
-          console.log('res.data: ', res.data);
           setTrackingHistory(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      setShowTracking(true);
+      setTrackingHistory('not available');
     }
   }
 
@@ -63,12 +67,6 @@ const SingleOrderModal = ({ orderNumber, orderInfo, toggleModal, tracking, forma
       searchTrackingAPI(orderInfo.tracking);
     }
   }
-
-  // useEffect(() => {
-  //   if (showMessages) {
-  //     fetchMessages();
-  //   }
-  // }, []);
 
   let displayTracking = false;
   if (showTracking && trackingHistory) {

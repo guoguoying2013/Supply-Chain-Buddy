@@ -94,10 +94,10 @@ class EnterNewOrderModal extends React.Component {
           <br />
           <input type="date" value={this.state.required_shipping_date} onChange={this.handleChange} name="required_shipping_date" />
           <br />
-          <div id="button-left">
+          <div className="button-left-nav-bar">
             <button onClick={this.handleSubmit} className="submit-button" type="submit">Submit</button>
           </div>
-          <div id="button-right">
+          <div className="button-left-nav-bar">
             <button onClick={this.props.toggleForm} className="submit-button" type="button">Cancel</button>
           </div>
         </form>
