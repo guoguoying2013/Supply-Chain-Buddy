@@ -7,8 +7,6 @@ const controllers = require('./controllers');
 const sessionSecret = require('../token_login.js');
 const middleware = require('./middleware');
 
-// salty and hash password.
-
 const app = express();
 
 app.use(session({
@@ -94,6 +92,18 @@ app.get('/api/home', (req, res) => {
     res.status(200).send(req.session.user_id);
   } catch (err) {
     res.send(err);
+  }
+});
+
+app.get('/api/tracking', controllers.cacheTracking.checkCache, async (req, res) => {
+  try {
+    const { id } = req.query;
+    console.log('id: ', id);
+    const response = await controllers.getShippingStatus(id);
+    controllers.cacheTracking.cacheInfo(id, response);
+    return res.send(response);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
