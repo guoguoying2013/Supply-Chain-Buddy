@@ -9,5 +9,6 @@ import '../dist/dashboard.css';
 import '../dist/enterNewOrderModal.css';
 import '../dist/app.css';
 import '../dist/dataVis.css';
+import '../dist/signUpModal.css';
 
 ReactDOM.render(<App />, document.getElementById('app'));

@@ -2,12 +2,25 @@ import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
-const SignUpForm = () => {
+const SignUpForm = ({ closeModal }) => {
   const { register, handleSubmit, errors, watch } = useForm();
   const password = useRef({});
   password.current = watch('password', '');
   const onSubmit = (data) => {
     console.log(data);
+    let newUser = { ...data };
+    delete newUser.passwordRepeat;
+    console.log(newUser);
+    axios.post('/auth/signup', newUser)
+      .then((res) => {
+        console.log('res at sign up form', res);
+      })
+      .then(() => {
+        closeModal();
+      })
+      .catch((err) => {
+        console.log('err at sign up form: ', err);
+      });
   };
 
   return (

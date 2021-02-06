@@ -45,7 +45,7 @@ const App = () => {
       />
       {signUpForm
             && (
-            <SignUpForm />
+            <SignUpForm closeModal={toggleSignUpForm} />
             )}
       <div className="dashboard">
         {showDashBoard && (

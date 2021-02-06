@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 const { aql } = require('arangojs/lib');
 const crypto = require('crypto');
 const db = require('../../database');
